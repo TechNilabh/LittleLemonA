@@ -533,6 +533,15 @@ body {
   color: #94a3b8;
 }
 
+/* RE / CE / other verdicts share the same gray style */
+.verdict-RE,
+.verdict-CE,
+.verdict-COMP {
+  background-color: rgba(148, 163, 184, 0.15);
+  border: 1px solid #94a3b8;
+  color: #94a3b8;
+}
+
 /* Alert Box */
 .b-alert {
   background-color: rgba(244, 67, 54, 0.1);

@@ -25,10 +25,13 @@
         
         <!-- Rank Badge with dynamic inline style color -->
         <div class="rank-badge" style="
-          {% if 'grandmaster' in stats.rank|lower %}color: #f44336; border-color: #f44336;
+          {% if 'legendary grandmaster' in stats.rank|lower %}color: #f44336; border-color: #f44336;
+          {% elif 'international grandmaster' in stats.rank|lower %}color: #f44336; border-color: #f44336;
+          {% elif 'grandmaster' in stats.rank|lower %}color: #f44336; border-color: #f44336;
+          {% elif 'international master' in stats.rank|lower %}color: #ff9800; border-color: #ff9800;
           {% elif 'master' in stats.rank|lower %}color: #ff9800; border-color: #ff9800;
-          {% elif 'candidate' in stats.rank|lower %}color: #aa00aa; border-color: #aa00aa;
-          {% elif 'expert' in stats.rank|lower %}color: #0000ff; border-color: #0000ff;
+          {% elif 'candidate master' in stats.rank|lower %}color: #aa00aa; border-color: #aa00aa;
+          {% elif 'expert' in stats.rank|lower %}color: #2196f3; border-color: #2196f3;
           {% elif 'specialist' in stats.rank|lower %}color: #03a9f4; border-color: #03a9f4;
           {% elif 'pupil' in stats.rank|lower %}color: #47cf73; border-color: #47cf73;
           {% else %}color: #9e9e9e; border-color: #9e9e9e;{% endif %}
