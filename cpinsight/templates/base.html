@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CP Insight — Codeforces Analytics{% endblock %}</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'cpinsight/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <nav class="navbar">
+    <a href="{% url 'index' %}" class="brand">
+      CP INSIGHT <span class="brand-badge">BETA</span>
+    </a>
+    <div class="nav-links">
+      <a href="{% url 'index' %}" class="nav-link">Home</a>
+      <a href="https://codeforces.com" target="_blank" class="nav-link">Codeforces ↗</a>
+      <a href="http://127.0.0.1:8501" target="_blank" class="nav-btn-streamlit">⚡ Streamlit App</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="mono">CP INSIGHT // ENGINEERED WITH PYTHON, DJANGO & STREAMLIT</div>
+  </footer>
+
+  <!-- Main JS -->
+  <script src="{% static 'cpinsight/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

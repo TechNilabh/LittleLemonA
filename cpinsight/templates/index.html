@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CP Insight — Know Your Codeforces Journey{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <!-- Subtle Animated Background Canvas -->
+  <canvas id="heroBgCanvas" class="hero-bg-canvas"></canvas>
+
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span>●</span> CODEFORCES ANALYTICS ENGINE
+    </div>
+    
+    <h1 class="hero-title">
+      Know your <span>CP journey</span>
+    </h1>
+    
+    <p class="hero-subtitle">
+      Instant rating history, problem tag breakdowns, difficulty distribution, and deep competitive programming analytics.
+    </p>
+
+    <!-- Handle Input Form -->
+    <form action="{% url 'index' %}" method="POST" class="search-box-form">
+      {% csrf_token %}
+      <input 
+        type="text" 
+        name="handle" 
+        class="search-input" 
+        placeholder="Enter Codeforces handle (e.g. tourist)..." 
+        required
+        autocomplete="off"
+      />
+      <button type="submit" class="search-btn">
+        ANALYZE ➔
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FEATURES GRID SECTION -->
+<section class="features-section">
+  <div class="section-label">// SYSTEM CAPABILITIES</div>
+  <h2 class="section-heading">Structured CP Intelligence</h2>
+
+  <div class="features-grid">
+    <!-- Card 1 -->
+    <div class="b-card">
+      <div class="feature-num">01</div>
+      <h3 class="feature-title">Rating Trajectory</h3>
+      <p class="feature-desc">
+        Track your rating progression over time with clean interactive line charts and contest gain/loss visualization.
+      </p>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="b-card">
+      <div class="feature-num">02</div>
+      <h3 class="feature-title">Tag & Weakness Matrix</h3>
+      <p class="feature-desc">
+        Discover top solved topics (DP, Graphs, Math, Greedy) and pinpoint weak problem areas instantly.
+      </p>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="b-card">
+      <div class="feature-num">03</div>
+      <h3 class="feature-title">Difficulty Distribution</h3>
+      <p class="feature-desc">
+        Analyze problem distribution across rating buckets (&lt;1200, 1200-1500, 1500-1800, 1800-2100, 2100+).
+      </p>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="b-card">
+      <div class="feature-num">04</div>
+      <h3 class="feature-title">Streamlit Deep Dive</h3>
+      <p class="feature-desc">
+        Launch interactive Plotly dashboards with multi-metric correlation and detailed submission feeds.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

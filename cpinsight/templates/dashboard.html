@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CP Insight — {{ handle }}'s Analytics{% endblock %}
+
+{% block content %}
+<div class="container">
+  {% if error %}
+    <div class="b-alert">
+      ⚠️ ERROR: {{ error }}
+      <div style="margin-top: 0.5rem;">
+        <a href="{% url 'index' %}" style="color: var(--text-main); text-decoration: underline;">Return to Home and try another handle</a>
+      </div>
+    </div>
+  {% else %}
+
+    <!-- Top Profile & Summary Row -->
+    <div class="profile-grid">
+      <!-- Left: User Identity -->
+      <div class="b-card profile-card">
+        <div class="profile-avatar-wrap">
+          <img src="{{ stats.avatar }}" alt="{{ stats.handle }}" class="profile-avatar">
+        </div>
+        <div class="profile-handle">{{ stats.handle }}</div>
+        
+        <!-- Rank Badge with dynamic inline style color -->
+        <div class="rank-badge" style="
+          {% if 'grandmaster' in stats.rank|lower %}color: #f44336; border-color: #f44336;
+          {% elif 'master' in stats.rank|lower %}color: #ff9800; border-color: #ff9800;
+          {% elif 'candidate' in stats.rank|lower %}color: #aa00aa; border-color: #aa00aa;
+          {% elif 'expert' in stats.rank|lower %}color: #0000ff; border-color: #0000ff;
+          {% elif 'specialist' in stats.rank|lower %}color: #03a9f4; border-color: #03a9f4;
+          {% elif 'pupil' in stats.rank|lower %}color: #47cf73; border-color: #47cf73;
+          {% else %}color: #9e9e9e; border-color: #9e9e9e;{% endif %}
+        ">
+          {{ stats.rank }}
+        </div>
+
+        <div style="font-size: 0.8rem; color: var(--text-muted); width: 100%;">
+          <div>📍 {{ stats.country }}</div>
+          <div style="margin-top: 0.2rem;">🏢 {{ stats.organization }}</div>
+        </div>
+      </div>
+
+      <!-- Right: Primary Stats Metrics Grid -->
+      <div class="b-card">
+        <div class="b-card-header">
+          <span class="b-card-title">Performance Metrics</span>
+          <span class="mono" style="font-size: 0.8rem; color: var(--text-subtle);">LIVE DATA</span>
+        </div>
+
+        <div class="stats-summary-grid">
+          <div class="stat-item-box">
+            <div class="stat-item-label">Current Rating</div>
+            <div class="stat-item-val" style="color: var(--accent-violet);">{{ stats.rating }}</div>
+            <div class="stat-item-sub">Max: {{ stats.max_rating }}</div>
+          </div>
+
+          <div class="stat-item-box">
+            <div class="stat-item-label">Peak Rank</div>
+            <div class="stat-item-val" style="font-size: 1.25rem; margin-top: 0.3rem;">{{ stats.max_rank }}</div>
+            <div class="stat-item-sub">Highest Achieved</div>
+          </div>
+
+          <div class="stat-item-box">
+            <div class="stat-item-label">Unique Solved</div>
+            <div class="stat-item-val" style="color: #47cf73;">{{ stats.total_solved }}</div>
+            <div class="stat-item-sub">Accepted Problems</div>
+          </div>
+
+          <div class="stat-item-box">
+            <div class="stat-item-label">Contribution</div>
+            <div class="stat-item-val">{{ stats.contribution }}</div>
+            <div class="stat-item-sub">Community Score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Container Element carrying JSON for Chart.js -->
+    <div id="statsDataHolder" 
+      data-ratings="true"
+      data-rating-labels="{{ stats.rating_labels_json }}"
+      data-rating-values="{{ stats.rating_values_json }}"
+      data-tag-labels="{{ stats.tag_labels_json }}"
+      data-tag-values="{{ stats.tag_values_json }}"
+      data-diff-labels="{{ stats.diff_labels_json }}"
+      data-diff-values="{{ stats.diff_values_json }}"
+    ></div>
+
+    <!-- Rating History Line Chart -->
+    <div class="b-card" style="margin-bottom: 1.5rem;">
+      <div class="b-card-header">
+        <span class="b-card-title">Rating Trajectory</span>
+        <span class="mono" style="font-size: 0.8rem; color: var(--text-subtle);">CHART.JS LINE</span>
+      </div>
+      <div class="chart-wrapper-tall">
+        <canvas id="ratingChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Two Side-by-Side Charts -->
+    <div class="charts-grid-two">
+      <!-- Tag Breakdown Bar Chart -->
+      <div class="b-card">
+        <div class="b-card-header">
+          <span class="b-card-title">Top Problem Tags</span>
+          <span class="mono" style="font-size: 0.75rem; color: var(--text-subtle);">SOLVED FREQUENCY</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="tagsChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Difficulty Donut Chart -->
+      <div class="b-card">
+        <div class="b-card-header">
+          <span class="b-card-title">Difficulty Distribution</span>
+          <span class="mono" style="font-size: 0.75rem; color: var(--text-subtle);">RATING BUCKETS</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="diffChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Submissions Table -->
+    <div class="b-card" style="margin-top: 1.5rem;">
+      <div class="b-card-header">
+        <span class="b-card-title">Recent Submissions</span>
+        <span class="mono" style="font-size: 0.8rem; color: var(--text-subtle);">LAST 15 ATTEMPTS</span>
+      </div>
+
+      <div class="table-container">
+        <table class="b-table">
+          <thead>
+            <tr>
+              <th>Problem</th>
+              <th>Tags</th>
+              <th>Verdict</th>
+              <th>When</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sub in stats.recent_submissions %}
+              <tr>
+                <td>
+                  <a href="{{ sub.problem_url }}" target="_blank" class="problem-link">
+                    {{ sub.problem_code }} - {{ sub.problem_name }}
+                  </a>
+                </td>
+                <td class="mono" style="font-size: 0.8rem; color: var(--text-muted);">
+                  {{ sub.tags }}
+                </td>
+                <td>
+                  <span class="badge-verdict verdict-{{ sub.verdict_short }}">
+                    {{ sub.verdict_short }}
+                  </span>
+                </td>
+                <td class="mono" style="font-size: 0.8rem; color: var(--text-subtle);">
+                  {{ sub.when }}
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-subtle); padding: 2rem;">
+                  No submission history found for this handle.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  {% endif %}
+</div>
+{% endblock %}
