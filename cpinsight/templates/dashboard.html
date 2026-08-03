@@ -78,14 +78,14 @@
     </div>
 
     <!-- Data Container Element carrying JSON for Chart.js -->
-    <div id="statsDataHolder" 
+    <div id="statsDataHolder"
       data-ratings="true"
-      data-rating-labels="{{ stats.rating_labels_json }}"
-      data-rating-values="{{ stats.rating_values_json }}"
-      data-tag-labels="{{ stats.tag_labels_json }}"
-      data-tag-values="{{ stats.tag_values_json }}"
-      data-diff-labels="{{ stats.diff_labels_json }}"
-      data-diff-values="{{ stats.diff_values_json }}"
+      data-rating-labels='{{ stats.rating_labels_json|safe }}'
+      data-rating-values='{{ stats.rating_values_json|safe }}'
+      data-tag-labels='{{ stats.tag_labels_json|safe }}'
+      data-tag-values='{{ stats.tag_values_json|safe }}'
+      data-diff-labels='{{ stats.diff_labels_json|safe }}'
+      data-diff-values='{{ stats.diff_values_json|safe }}'
     ></div>
 
     <!-- Rating History Line Chart -->
@@ -128,7 +128,7 @@
     <div class="b-card" style="margin-top: 1.5rem;">
       <div class="b-card-header">
         <span class="b-card-title">Recent Submissions</span>
-        <span class="mono" style="font-size: 0.8rem; color: var(--text-subtle);">LAST 15 ATTEMPTS</span>
+        <span class="mono" style="font-size: 0.8rem; color: var(--text-subtle);">LAST 20 ATTEMPTS</span>
       </div>
 
       <div class="table-container">
